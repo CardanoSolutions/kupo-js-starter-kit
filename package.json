@@ -1,0 +1,19 @@
+{
+  "name": "kupo-starter-kit",
+  "version": "1.0.0",
+  "description": "Example setups using Kupo, in JavaScript",
+  "repository": "git@github.com:CardanoSolutions/kupo-starter-kit.git",
+  "author": "KtorZ <matthias.benkort@gmail.com>",
+  "license": "MPL-2.0",
+  "private": false,
+  "dependencies": {
+    "bech32": "^2.0.0",
+    "delay": "^5.0.0",
+    "node-fetch": "^3.3.0",
+    "stream-json": "^1.7.5"
+  },
+  "scripts": {
+    "example-1": "node src/example_1.mjs",
+    "example-2": "node src/example_2.mjs"
+  }
+}
