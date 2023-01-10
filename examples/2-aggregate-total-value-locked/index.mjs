@@ -3,7 +3,7 @@ import { bech32 } from 'bech32';
 import StreamArray from 'stream-json/streamers/StreamArray.js';
 
 // If you're running through Demeter, use the 'Public URL' from the console.
-const SERVER_URL = "http://127.0.0.1:1442";
+const SERVER_URL = "http://localhost:1442";
 const SYNC_TOLERANCE = 300; // ~ 5 minutes on the chain, in slots
 
 // Check whether a (bech32-encoded) address is a script address. The first 4
@@ -13,9 +13,13 @@ const SYNC_TOLERANCE = 300; // ~ 5 minutes on the chain, in slots
 //
 // See also: https://github.com/cardano-foundation/CIPs/tree/master/CIP-0019/#shelley-addresses
 function isScriptAddress(address) {
-  const firstByte = bech32.fromWords(bech32.decode(address, 999).words)[0];
-  const addressType = firstByte >> 4;
-  return [1,3,5,7].includes(addressType);
+  try {
+    const firstByte = bech32.fromWords(bech32.decode(address, 999).words)[0];
+    const addressType = firstByte >> 4;
+    return [1,3,5,7].includes(addressType);
+  } catch(_e) {
+    return false;
+  }
 }
 
 // Before anything, we want to leave a small warning should the Kupo server not
@@ -29,6 +33,12 @@ async function warnIfNotSynchronized() {
   if (delta > SYNC_TOLERANCE) {
     console.error("\u001b[33mWARNING\u001b[0m | The server is not yet synchronized with the chain, results may be inaccurate.");
   }
+}
+
+// Display an amount of Lovelace in millions of Ada, with 2 decimals.
+function inMillionOfAda(lovelace) {
+  let ada = lovelace / 1000000n; // 1 Ada = 1,000,000 Lovelace
+  return `${Math.round(Number(ada / 10000n)) / 100}M t₳`;
 }
 
 async function main() {
@@ -51,16 +61,16 @@ async function main() {
   // (1) start processing results immediately
   // (2) process the response in constant memory
   const pipeline = response.body.pipe(StreamArray.withParser());
-  const { tvl, countScripts } = await new Promise(resolve => {
+  return new Promise(resolve => {
     let tvl = 0n;
     let countScripts = 0;
     let count = 0;
 
-    pipeline.on('end', () => {
-      process.stderr.cursorTo(0);
-      process.stderr.clearLine();
-      resolve({ tvl, countScripts });
-    });
+    function step() {
+        process.stdout.cursorTo(0);
+        process.stdout.clearLine();
+        process.stdout.write(`${inMillionOfAda(tvl)} locked in ${countScripts} scripts.`);
+    }
 
     pipeline.on('data', chunk => {
       count += 1;
@@ -85,20 +95,22 @@ async function main() {
         tvl += BigInt(chunk.value.value.coins);
       }
 
-      // At the moment of writing this tutorial, there are ~611K UTxOs on the
+      // At the moment of writing this tutorial, there are ~650K UTxOs on the
       // preview network, so aggregating all of them takes a few seconds.
       //
       // This will make the command show some progress as it goes through all
       // results.
       if (count % 100 === 0) {
-        process.stderr.cursorTo(0);
-        process.stderr.clearLine();
-        process.stderr.write(`${count} outputs processed...`);
+        step();
       }
     });
-  });
 
-  console.log(`${(tvl / 1000000n)}₳ locked in ${countScripts} scripts.`);
+    pipeline.on('end', () => {
+      step();
+      process.stdout.write("\n");
+      resolve();
+    });
+  });
 }
 
 await main();

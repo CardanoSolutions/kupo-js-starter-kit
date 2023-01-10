@@ -13,7 +13,8 @@
     "stream-json": "^1.7.5"
   },
   "scripts": {
-    "example-1": "node src/example_1.mjs",
-    "example-2": "node src/example_2.mjs"
+    "example-1": "node examples/1-watch-single-output/index.mjs",
+    "example-2": "node examples/2-aggregate-total-value-locked/index.mjs",
+    "example-3": "node examples/3-find-hosky-hodlers/index.mjs"
   }
 }
