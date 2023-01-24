@@ -55,3 +55,11 @@ Another example of aggregating large set of data, but only over a specific perio
 Kupo's ranges. Here, we're going to look at $HOSKYt holders on `preview`.
 
 See [examples/3-find-hosky-holders](./examples/3-find-hosky-hodlers#readme).
+
+### Example 4 - Collect CIP-0025 media NFT minting metadata
+
+Let's demonstrate how we can pattern on transaction metadata-tag to collect
+outputs from transactions minting CIP-0025 compliant NFTS. This example also
+shows how to fetch the associated metadata directly from Kupo.
+
+See [examples/4-cip-0025-metadata](./examples/4-cip-0025-metadata#readme).

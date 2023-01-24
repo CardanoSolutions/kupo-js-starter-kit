@@ -35,9 +35,9 @@ Put together, we can start our Kupo instance as follows:
 kupo \
   --node-socket /path/to/cardano-node/node.socket \
   --node-config /path/to/cardano-node/config.json \
+  --workdir example-1.db \
   --since "4725274.13c1f69913564b37c5c9241bba77eb5b9af63bb2d8d930fc4c36219383209c1c" \
-  --match "0@60eb97c0b6f83c433dbecd371ff8e14b697b1b0c87377dd80421dddd59baeaae" \
-  --workdir db-example-1
+  --match "0@60eb97c0b6f83c433dbecd371ff8e14b697b1b0c87377dd80421dddd59baeaae"
 ```
 
 Note that, if you're running this example through [demeter.run](https://demeter.run),

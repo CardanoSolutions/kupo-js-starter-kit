@@ -15,6 +15,7 @@
   "scripts": {
     "example-1": "node examples/1-watch-single-output/index.mjs",
     "example-2": "node examples/2-aggregate-total-value-locked/index.mjs",
-    "example-3": "node examples/3-find-hosky-hodlers/index.mjs"
+    "example-3": "node examples/3-find-hosky-hodlers/index.mjs",
+    "example-4": "node examples/4-cip-0025-metadata/index.mjs"
   }
 }

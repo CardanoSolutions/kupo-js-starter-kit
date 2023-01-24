@@ -14,11 +14,11 @@ This gives us roughly the following options:
 kupo \
   --node-socket /path/to/cardano-node/node.socket \
   --node-config /path/to/cardano-node/config.json \
+  --workdir example-2.db \
   --since "origin" \
   --match "*/*" \
   --prune-utxo \
-  --defer-db-indexes \
-  --workdir db-example-2
+  --defer-db-indexes
 ```
 
 Note that, if you're running this example through [demeter.run](https://demeter.run),
